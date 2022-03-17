@@ -63,6 +63,7 @@ z <- plot_ordination(relab_genera, ord, color = "Description") +
 geom_point(size=4) +
 stat_ellipse(aes(group=Description))
 print(y)
+write.csv(y$data, paste(outputfile,"csv",sep="."))
 print(z)
 #samples <- data.frame(sample_data(relab_genera))
 #adonis(abrel_bray ~ Test, data = samples)
