@@ -1,0 +1,5 @@
+otufile asv.tab.norm.csv
+mapping sample_data.csv
+tree    asv.taxonomy.quoted.padded.csv
+distance	bray
+differential	PCoA
