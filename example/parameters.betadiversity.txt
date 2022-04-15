@@ -3,3 +3,4 @@ mapping sample_data.csv
 tree    asv.taxonomy.quoted.padded.csv
 distance	bray
 differential	PCoA
+column	Description

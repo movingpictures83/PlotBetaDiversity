@@ -29,6 +29,7 @@ input <- function(inputfile) {
 physeq1 <<- read_csv2phyloseq(otu.file=otu.path, taxonomy.file=tree.path, metadata.file=map.path, sep=",")
    distmeth <<- toString(parameters["distance", 2])
    diffmeth <<- toString(parameters["differential", 2])
+   column <<- toString(parameters["column", 2])
 }
 
 run <- function() {
@@ -37,7 +38,10 @@ relab_genera <<- transform_sample_counts(physeq1, function(x) x / sum(x) * 100)
 abrel_bray <- phyloseq::distance(relab_genera, method = distmeth)
 abrel_bray <- as.matrix(abrel_bray)
 sub_dist <- list()
-groups_all <- sample_data(relab_genera)$Description
+#print(column)
+#print((sample_data(relab_genera))[["Description"]])
+groups_all <- sample_data(relab_genera)[[column]]
+#groups_all <- attributes(sample_data(relab_genera))[column]#sample_data(relab_genera)$as.name(column)
 for (group in groups_all) {
      row_group <- which(groups_all == group)
      sample_group <- sample_names(relab_genera)[row_group]
@@ -59,9 +63,9 @@ y <- ggplot(df.bray, aes(x=L1, y=value, colour=L1)) +
    ylab("Beta Diversity") +
    theme(axis.title.x=element_blank(), axis.text.x=element_text(angle=45,hjust=1,vjust=1,size=12), axis.text.y=element_text(size=12))
 ord = ordinate(relab_genera, method=diffmeth, distance = distmeth)
-z <- plot_ordination(relab_genera, ord, color = "Description") +
+z <- plot_ordination(relab_genera, ord, color = column) +
 geom_point(size=4) +
-stat_ellipse(aes(group=Description))
+stat_ellipse(aes(group=column))
 print(y)
 write.csv(y$data, paste(outputfile,"csv",sep="."))
 print(z)
