@@ -4,3 +4,4 @@ tree    asv.taxonomy.quoted.padded.csv
 distance	bray
 differential	PCoA
 column	Description
+colors	colors.txt
