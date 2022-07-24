@@ -15,6 +15,7 @@ mapping: Mapping table (CSV)
 tree: Phylogenetic tree (CSV)
 distance: Metric for distance calculation (STRING)
 differential: Metric for differential analysis (STRING).
-
+column: The column to differentiate
+colors: The colors for differentiation
 
 The plot will then be generated using the provided prefix (prefix.pdf), with a supplemental prefix.csv file containing diversity values.
