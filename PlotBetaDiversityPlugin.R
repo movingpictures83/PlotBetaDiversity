@@ -18,7 +18,6 @@ input <- function(inputfile) {
   if (length(pfix) != 0) {
      prefix <- paste(pfix, "/", sep="")
   }
-  print("HI")
   parameters <<- read.table(inputfile, as.is=T);
   rownames(parameters) <<- parameters[,1];
    # Need to get the three files
@@ -27,20 +26,14 @@ input <- function(inputfile) {
    tree.path <<- paste(pfix, toString(parameters["tree", 2]), sep="")
    map.path <<- paste(pfix, toString(parameters["mapping", 2]), sep="")
    colors.path <<- paste(pfix, toString(parameters["colors", 2]), sep="")
-   print("HIB")
 physeq1 <<- read_csv2phyloseq(otu.file=otu.path, taxonomy.file=tree.path, metadata.file=map.path, sep=",")
-   print("HIC")
-print(otu_table(physeq1))
-print(sample_data(physeq1))
    distmeth <<- toString(parameters["distance", 2])
    diffmeth <<- toString(parameters["differential", 2])
    column <<- toString(parameters["column", 2])
    allGroupsColors <<- readLines(file(colors.path, "r"))
-   print(allGroupsColors)
 }
 
 run <- function() {
-print("RUNNING")
 relab_genera <<- transform_sample_counts(physeq1, function(x) x / sum(x) * 100)
 abrel_bray <- phyloseq::distance(relab_genera, method = distmeth)
 abrel_bray <- as.matrix(abrel_bray)
@@ -71,14 +64,13 @@ y <- ggplot(df.bray, aes(x=L1, y=value, colour=L1)) +
    ylab("Beta Diversity") +
    theme(axis.title.x=element_blank(), axis.text.x=element_text(angle=45,hjust=1,vjust=1,size=12), axis.text.y=element_text(size=12))
 ord = ordinate(relab_genera, method=diffmeth, distance = distmeth)
-print(ord)
 z <- plot_ordination(relab_genera, ord, color = column, label="Name") +
 geom_point(size=4) +
    scale_color_manual(values = allGroupsColors) +
 stat_ellipse()
-#stat_ellipse(aes(group=column))
-print(y)
+#stat_ellipse(aes(group=Description))
 write.csv(y$data, paste(outputfile,"csv",sep="."))
+print(y)
 print(z)
 #samples <- data.frame(sample_data(relab_genera))
 #adonis(abrel_bray ~ Test, data = samples)
