@@ -30,6 +30,11 @@ physeq1 <<- read_csv2phyloseq(otu.file=otu.path, taxonomy.file=tree.path, metada
    distmeth <<- toString(parameters["distance", 2])
    diffmeth <<- toString(parameters["differential", 2])
    column <<- toString(parameters["column", 2])
+   doLabels <<- "False"
+     if ("doLabels" %in% rownames(parameters)) {
+  doLabels        <<- toString(parameters["doLabels", 2])
+  }
+
    allGroupsColors <<- readLines(file(colors.path, "r"))
 }
 
@@ -64,10 +69,18 @@ y <- ggplot(df.bray, aes(x=L1, y=value, colour=L1)) +
    ylab("Beta Diversity") +
    theme(axis.title.x=element_blank(), axis.text.x=element_text(angle=45,hjust=1,vjust=1,size=12), axis.text.y=element_text(size=12))
 ord = ordinate(relab_genera, method=diffmeth, distance = distmeth)
+if (doLabels == "True") {
 z <- plot_ordination(relab_genera, ord, color = column, label="Name") +
 geom_point(size=4) +
    scale_color_manual(values = allGroupsColors) +
 stat_ellipse()
+}
+else {
+z <- plot_ordination(relab_genera, ord, color = column) +
+geom_point(size=4) +
+   scale_color_manual(values = allGroupsColors) +
+stat_ellipse()
+}
 #stat_ellipse(aes(group=Description))
 write.csv(y$data, paste(outputfile,"csv",sep="."))
 print(y)
